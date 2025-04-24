@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Results</title>
+    <style>
+        body {
+            padding-top: 30px;
+        }
+
+        nav {
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: -20px;
+            z-index: 1000;
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            display: inline-block;
+        }
+
+        nav ul li a:hover {
+            background-color: #555;
+            border-radius: 5px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            color: #333;
+            margin-top: 80px;
+        }
+
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+
+        table th, table td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #333;
+            color: white;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        table tr:hover {
+            background-color: #ddd;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #333;
+        }
+
+       
+        #pieChart {
+            width: 30%;
+            margin: 50px auto;
+        }
+    </style>
+    <!-- Include Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'manage_products' %}">Manage Products</a></li>
+            <li><a href="{% url 'results' %}">Results</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+    </nav>
+
+    <h1>Product List with Total Price</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in product_details %}
+                <tr>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.quantity }}</td>
+                    <td>{{ product.price }}</td>
+                    <td>{{ product.total_price }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Total Price for All Products: {{ total_sum }}</h2>
+    <h2>Stocks</h2>
+    
+    <div id="pieChart">
+        <canvas id="productPieChart"></canvas>
+    </div>
+
+    <script>
+       
+        const productData = {
+            labels: [
+                {% for product in product_details %}
+                    "{{ product.name }}", 
+                {% endfor %}
+            ],
+            datasets: [{
+                data: [
+                    {% for product in product_details %}
+                        {{ product.quantity }},
+                    {% endfor %}
+                ],
+                backgroundColor: ['#ff9999', '#66b3ff', '#99ff99', '#ffcc99', '#c2c2f0', '#ffb3e6'], // Colors for the segments
+                hoverOffset: 4
+            }]
+        };
+
+       
+        const config = {
+            type: 'pie',
+            data: productData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.label + ': ' + tooltipItem.raw + ' units';
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+   
+        const productPieChart = new Chart(
+            document.getElementById('productPieChart'),
+            config
+        );
+    </script>
+</body>
+</html>

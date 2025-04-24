@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Inventory System</title>
+    <style>
+        body {
+            padding-top: 30px; 
+        }
+        .page-title {
+            font-size: 2rem;
+            color: #333;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .low-stock-title {
+            font-size: 1.5rem;
+            color: #d9534f;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .low-stock-list {
+            list-style-type: none;
+            padding: 0;
+            text-align: center;
+        }
+
+        .low-stock-list li {
+            font-size: 1.1rem;
+            color: #555;
+            margin: 5px 0;
+        }
+
+        nav {
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: -20px;
+            z-index: 1000;
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            display: inline-block;
+        }
+
+        nav ul li a:hover {
+            background-color: #555;
+            border-radius: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #333;
+            color: white;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        table tr:hover {
+            background-color: #ddd;
+        }
+
+        .edit-button a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .delete-button a {
+            color: white;
+            text-decoration: none;
+        }
+
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+            width: auto;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        button.delete {
+            background-color: #f44336;
+        }
+
+        button.delete:hover {
+            background-color: #e53935;
+        }
+
+        .low-stock-table {
+            width: 50%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+
+        .low-stock-table th, .low-stock-table td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        .low-stock-table th {
+            background-color: #333;
+            color: white;
+        }
+
+        .low-stock-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .low-stock-table tr:hover {
+            background-color: #ddd;
+        }
+
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'manage_products' %}">Manage Products</a></li>
+            <li><a href="{% url 'results' %}">Results</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+    </nav>
+
+    <h1 class="page-title">Welcome to the Inventory System!</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+                <tr>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.category }}</td>
+                    <td>{{ product.quantity }}</td>
+                    <td>{{ product.price }}</td>
+                    <td>{{ product.description }}</td>
+                    <td>
+                        <button><a href="{% url 'edit_product' product.id %}" style="color: white; text-decoration: none;">Edit</a></button>
+                    </td>
+                    <td>
+                        <button class="delete"><a href="{% url 'delete_product' product.id %}" style="color: white; text-decoration: none;">Delete</a></button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="bottom-info">
+        <h2 class="low-stock-title">Low Stock Products</h2>
+        <table class="low-stock-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Stock</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in low_stock_products %}
+                    <tr>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.quantity }} in stock</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

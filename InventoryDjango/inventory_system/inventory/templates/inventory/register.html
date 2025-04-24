@@ -1,14 +1,112 @@
-<h2>Register</h2>
-<form method="POST">
-  {% csrf_token %}
-  <input type="text" name="username" placeholder="Username" required><br>
-  <input type="password" name="password" placeholder="Password" required><br>
-  <input type="password" name="confirm_password" placeholder="Confirm Password" required><br>
-  <button type="submit">Register</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<style>
+  * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+  }
 
-{% for message in messages %}
-<p>{{ message }}</p>
-{% endfor %}
+  body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f7fc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+  }
 
-<p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+  .register-container {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 5px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 350px;
+      text-align: center;
+  }
+
+  h2 {
+      color: #333;
+      font-size: 28px;
+      margin-bottom: 30px;
+  }
+
+  form {
+      width: 100%;
+      padding: 15px;
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+  }
+
+  form input {
+      width: 100%;
+      padding: 10px;
+      margin: 12px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+  }
+
+  form button {
+      width: 100%;
+      padding: 16px;
+      background-color: #333;
+      border: none;
+      color: white;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+  }
+
+  form button:hover {
+      background-color: #555;
+  }
+
+  .messages {
+      margin-top: 20px;
+      color: red;
+      font-size: 16px;
+  }
+
+  p {
+      font-size: 16px;
+      margin-top: 30px;
+  }
+
+  a {
+      color: #4CAF50;
+      text-decoration: none;
+  }
+
+  a:hover {
+      text-decoration: underline;
+  }
+</style>
+<body>
+    <div class="register-container">
+        <h2>Register</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="Username" required><br>
+            <input type="password" name="password" placeholder="Password" required><br>
+            <input type="password" name="confirm_password" placeholder="Confirm Password" required><br>
+            <button type="submit">Register</button>
+        </form>
+
+        {% for message in messages %}
+            <p class="messages">{{ message }}</p>
+        {% endfor %}
+
+        <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+    </div>
+</body>
+</html>

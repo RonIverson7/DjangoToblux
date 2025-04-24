@@ -95,7 +95,6 @@
     </style>
 </head>
 <body>
-
     <nav>
         <ul>
             <li><a href="{% url 'home' %}">Home</a></li>
@@ -109,19 +108,14 @@
         {% csrf_token %}
         <label for="name">Name:</label>
         {{ add_form.name }}
-
         <label for="category">Category:</label>
         {{ add_form.category }}
-
         <label for="description">Description:</label>
         {{ add_form.description }}
-
         <label for="quantity">Quantity:</label>
         {{ add_form.quantity }}
-
         <label for="price">Price:</label>
         {{ add_form.price }}
-
         <button type="submit" name="add_product">Add Product</button>
     </form>
 
@@ -132,23 +126,17 @@
                 {% csrf_token %}
                 <label for="name">Name:</label>
                 {{ edit_form.name }}
-
                 <label for="category">Category:</label>
                 {{ edit_form.category }}
-
                 <label for="description">Description:</label>
                 {{ edit_form.description }}
-
                 <label for="quantity">Quantity:</label>
                 {{ edit_form.quantity }}
-
                 <label for="price">Price:</label>
                 {{ edit_form.price }}
-
                 <button type="submit" name="edit_product">Update Product</button>
             </form>
         </div>
     {% endif %}
-
 </body>
 </html>

@@ -3,18 +3,18 @@
 {% block title %}Profile - Inventory System{% endblock %}
 
 {% block content %}
-<div class="profile-container" style="max-width: 600px; margin: 0 auto; padding: 20px;">
-    <h2 style="text-align: center; margin-bottom: 20px;">Your Profile</h2>
+<div class="profile-container" style="max-width: 600px; margin: 80px auto; padding: 20px;">
+    <h2 style="text-align: center; margin-bottom: 20px; color: #333;">Your Profile</h2>
     
-    <div class="user-info" style="background-color: #f9f9f9; padding: 20px; border-radius: 5px; margin-bottom: 20px;">
-        <h3 style="margin-bottom: 15px;">Account Information</h3>
+    <div class="user-info" style="background-color: #f9f9f9; padding: 20px; border-radius: 5px; margin-bottom: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+        <h3 style="text-align: center; margin-bottom: 15px; color: #333;">Account Information</h3>
         <p><strong>Username:</strong> {{ user.username }}</p>
         <p><strong>Email:</strong> {{ user.email }}</p>
         <p><strong>Date Joined:</strong> {{ user.date_joined|date:"F j, Y" }}</p>
     </div>
 
-    <div class="profile-form" style="background-color: #f9f9f9; padding: 20px; border-radius: 5px;">
-        <h3 style="margin-bottom: 15px;">Update Profile</h3>
+    <div class="profile-form" style="background-color: #f9f9f9; padding: 20px; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+        <h3 style="text-align: center; margin-bottom: 15px; color: #333;">Update Profile</h3>
         <form method="POST">
             {% csrf_token %}
             {% for field in form %}
@@ -33,7 +33,7 @@
                     {% endif %}
                 </div>
             {% endfor %}
-            <button type="submit" style="width: 100%; padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">
+            <button type="submit" style="width: 100%; padding: 10px; background-color: #333; color: white; border: none; border-radius: 5px; cursor: pointer;">
                 Update Profile
             </button>
         </form>

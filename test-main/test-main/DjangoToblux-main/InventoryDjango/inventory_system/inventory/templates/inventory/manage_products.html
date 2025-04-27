@@ -1,142 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Products</title>
-    <style>
-         nav {
-            background-color: #333;
-            color: white;
-            padding: 10px 20px;
-            width: 100%;
-            position: fixed;
-            top: 0;
-            left: -20px;
-            z-index: 1000;
-        }
+{% extends 'inventory/base.html' %}
 
-        nav ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: flex-end;
-        }
+{% block title %}Manage Products - Inventory System{% endblock %}
 
-        nav ul li {
-            margin-left: 20px;
-        }
-
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            padding: 10px 15px;
-            display: inline-block;
-        }
-
-        nav ul li a:hover {
-            background-color: #555;
-            border-radius: 5px;
-        }
-        form {
-            width: 30%;
-            margin: 80px auto;
-            padding: 15px;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        form label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: bold;
-        }
-
-        form input, form select {
-            width: 95%;
-            padding: 8px;
-            margin-bottom: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        form textarea {
-            width: 95%;
-            padding: 8px;
-            margin-bottom: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            height: 60px;
-        }
-
-        form button {
-            background-color: #333;
-            color: white;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        form button:hover {
-            background-color: #555;
-        }
-
-        .edit-form {
-            width: 30%;
-            margin: 80px auto;
-            padding: 15px;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-    </style>
-</head>
-<body>
-    <nav>
-        <ul>
-            <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="{% url 'manage_products' %}">Manage Products</a></li>
-            <li><a href="{% url 'results' %}">Results</a></li>
-            <li><a href="{% url 'logout' %}">Logout</a></li>
-        </ul>
-    </nav>
-
-    <form method="POST">
-        {% csrf_token %}
-        <label for="name">Name:</label>
-        {{ add_form.name }}
-        <label for="category">Category:</label>
-        {{ add_form.category }}
-        <label for="description">Description:</label>
-        {{ add_form.description }}
-        <label for="quantity">Quantity:</label>
-        {{ add_form.quantity }}
-        <label for="price">Price:</label>
-        {{ add_form.price }}
-        <button type="submit" name="add_product">Add Product</button>
-    </form>
+{% block content %}
+<div class="manage-container" style="max-width: 800px; margin: 80px auto; padding: 20px;">
+    <h2 style="text-align: center; margin-bottom: 20px; color: #333;">Manage Products</h2>
+    
+    <div class="add-form" style="background-color: #f9f9f9; padding: 20px; border-radius: 5px; margin-bottom: 30px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+        <h3 style="text-align: center; margin-bottom: 15px; color: #333;">Add New Product</h3>
+        <form method="POST">
+            {% csrf_token %}
+            {% for field in add_form %}
+                <div style="margin-bottom: 15px;">
+                    <label for="{{ field.id_for_label }}" style="display: block; margin-bottom: 5px; font-weight: bold;">
+                        {{ field.label }}
+                    </label>
+                    {{ field }}
+                    {% if field.help_text %}
+                        <small style="display: block; color: #666; margin-top: 5px;">{{ field.help_text }}</small>
+                    {% endif %}
+                    {% if field.errors %}
+                        <div style="color: red; margin-top: 5px;">
+                            {{ field.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <button type="submit" name="add_product" style="width: 100%; padding: 10px; background-color: #333; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                Add Product
+            </button>
+        </form>
+    </div>
 
     {% if edit_form %}
-        <div class="edit-form">
-            <h2>Edit Product</h2>
+        <div class="edit-form" style="background-color: #f9f9f9; padding: 20px; border-radius: 5px; margin-bottom: 30px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+            <h3 style="text-align: center; margin-bottom: 15px; color: #333;">Edit Product</h3>
             <form method="POST">
                 {% csrf_token %}
-                <label for="name">Name:</label>
-                {{ edit_form.name }}
-                <label for="category">Category:</label>
-                {{ edit_form.category }}
-                <label for="description">Description:</label>
-                {{ edit_form.description }}
-                <label for="quantity">Quantity:</label>
-                {{ edit_form.quantity }}
-                <label for="price">Price:</label>
-                {{ edit_form.price }}
-                <button type="submit" name="edit_product">Update Product</button>
+                {% for field in edit_form %}
+                    <div style="margin-bottom: 15px;">
+                        <label for="{{ field.id_for_label }}" style="display: block; margin-bottom: 5px; font-weight: bold;">
+                            {{ field.label }}
+                        </label>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <small style="display: block; color: #666; margin-top: 5px;">{{ field.help_text }}</small>
+                        {% endif %}
+                        {% if field.errors %}
+                            <div style="color: red; margin-top: 5px;">
+                                {{ field.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <button type="submit" name="edit_product" style="width: 100%; padding: 10px; background-color: #333; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                    Update Product
+                </button>
             </form>
         </div>
     {% endif %}
-</body>
-</html>
+</div>
+{% endblock %}

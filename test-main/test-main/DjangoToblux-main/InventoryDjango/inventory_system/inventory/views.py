@@ -86,24 +86,35 @@ def logout_view(request):
 
 @login_required
 def home(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    
     query = request.GET.get('q', '')
     products = Product.objects.filter(user=request.user)
-
+    
     if query:
         products = products.filter(
             models.Q(name__icontains=query) |
             models.Q(category__icontains=query) |
             models.Q(description__icontains=query)
         )
-
-    context = {
-        'total_products': products.count(),
-        'products_in_stock': products.filter(quantity__gt=0).count(),  
-        'low_stock_products': products.filter(quantity__lte=5), 
+    
+    # Calculate total for each product
+    for product in products:
+        product.total = product.price * product.quantity
+    
+    # Calculate total sum of all products
+    total_sum = sum(product.total for product in products)
+    
+    # Get low stock products
+    low_stock_products = products.filter(quantity__lt=10)
+    
+    return render(request, 'inventory/home.html', {
         'products': products,
         'query': query,
-    }
-    return render(request, 'inventory/home.html', context)
+        'total_sum': total_sum,
+        'low_stock_products': low_stock_products
+    })
 
 
 @login_required

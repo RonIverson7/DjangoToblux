@@ -1,0 +1,42 @@
+{% extends 'inventory/base.html' %}
+
+{% block title %}Profile - Inventory System{% endblock %}
+
+{% block content %}
+<div class="profile-container" style="max-width: 600px; margin: 80px auto; padding: 20px;">
+    <h2 style="text-align: center; margin-bottom: 20px; color: #333;">Your Profile</h2>
+    
+    <div class="user-info" style="background-color: #f9f9f9; padding: 20px; border-radius: 5px; margin-bottom: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+        <h3 style="text-align: center; margin-bottom: 15px; color: #333;">Account Information</h3>
+        <p><strong>Username:</strong> {{ user.username }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Date Joined:</strong> {{ user.date_joined|date:"F j, Y" }}</p>
+    </div>
+
+    <div class="profile-form" style="background-color: #f9f9f9; padding: 20px; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+        <h3 style="text-align: center; margin-bottom: 15px; color: #333;">Update Profile</h3>
+        <form method="POST">
+            {% csrf_token %}
+            {% for field in form %}
+                <div style="margin-bottom: 15px;">
+                    <label for="{{ field.id_for_label }}" style="display: block; margin-bottom: 5px; font-weight: bold;">
+                        {{ field.label }}
+                    </label>
+                    {{ field }}
+                    {% if field.help_text %}
+                        <small style="display: block; color: #666; margin-top: 5px;">{{ field.help_text }}</small>
+                    {% endif %}
+                    {% if field.errors %}
+                        <div style="color: red; margin-top: 5px;">
+                            {{ field.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <button type="submit" style="width: 100%; padding: 10px; background-color: #333; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                Update Profile
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %} 

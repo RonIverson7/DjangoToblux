@@ -1,0 +1,88 @@
+{% extends 'inventory/base.html' %}
+
+{% block title %}Product Results - Inventory System{% endblock %}
+
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<style>
+    #pieChart {
+        width: 600px;
+        height: 600px;
+        margin: 100px auto;
+    }
+    .chart-title {
+        text-align: center;
+        font-size: 1.5rem;
+        color: #333;
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="results-container" style="max-width: 800px; margin: 0 auto; padding: 20px;">
+    <h2 class="chart-title">Product Stock Distribution</h2>
+    
+    <div id="pieChart">
+        <canvas id="productPieChart"></canvas>
+    </div>
+
+    <div id="productData" style="display: none;">
+        {% for product in product_details %}
+            <span class="product-name">{{ product.name }}</span>
+            <span class="product-quantity">{{ product.quantity }}</span>
+        {% endfor %}
+    </div>
+
+    <script>
+        window.addEventListener('load', function() {
+            const productNames = Array.from(document.querySelectorAll('.product-name')).map(el => el.textContent);
+            const productQuantities = Array.from(document.querySelectorAll('.product-quantity')).map(el => parseInt(el.textContent));
+
+            if (productNames.length > 0 && productQuantities.length > 0) {
+                const ctx = document.getElementById('productPieChart').getContext('2d');
+                const productPieChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: productNames,
+                        datasets: [{
+                            data: productQuantities,
+                            backgroundColor: [
+                                '#ff9999',
+                                '#66b3ff',
+                                '#99ff99',
+                                '#ffcc99',
+                                '#c2c2f0',
+                                '#ffb3e6'
+                            ],
+                            hoverOffset: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                                labels: {
+                                    font: {
+                                        size: 14
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(tooltipItem) {
+                                        return tooltipItem.label + ': ' + tooltipItem.raw + ' units';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</div>
+{% endblock %}

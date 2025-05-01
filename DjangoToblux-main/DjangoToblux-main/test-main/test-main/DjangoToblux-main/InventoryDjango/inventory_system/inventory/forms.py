@@ -16,6 +16,13 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['phone_number', 'address']
+        
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data.get('phone_number')
+        if phone_number and not phone_number.isdigit():
+            raise forms.ValidationError("Phone number must contain only digits.")
+        return phone_number
+
 
 class ProductForm(forms.ModelForm):
     class Meta:

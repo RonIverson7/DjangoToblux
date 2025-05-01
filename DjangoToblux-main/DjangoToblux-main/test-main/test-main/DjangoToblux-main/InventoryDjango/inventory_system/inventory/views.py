@@ -117,7 +117,6 @@ def home(request):
     })
 
 
-
 def manage_products(request):
     products = Product.objects.filter(user=request.user)
 
@@ -134,36 +133,12 @@ def manage_products(request):
                 product.save()
                 messages.success(request, "Product added successfully!")
                 return redirect('manage_products')
-        
-        elif 'edit_product' in request.POST:
-            product_id = request.POST.get('product_id')
-            product = get_object_or_404(Product, pk=product_id, user=request.user)
-            form = ProductForm(request.POST, instance=product)
-            if form.is_valid():
-                price = form.cleaned_data['price']
-                if price < 0:
-                    messages.error(request, "Price cannot be negative.")
-                    return redirect('manage_products')
-                form.save()
-                messages.success(request, "Product updated successfully!")
-                return redirect('manage_products')
-        
-        elif 'delete_product' in request.POST:
-            product_id = request.POST.get('product_id')
-            product = get_object_or_404(Product, pk=product_id, user=request.user)
-            product.delete()
-            messages.success(request, "Product deleted successfully!")
-            return redirect('manage_products')
-
     else:
         add_form = ProductForm()  
-        edit_form = None  
         return render(request, 'inventory/manage_products.html', {
             'products': products,
             'add_form': add_form,
-            'edit_form': edit_form,
         })
-
 
 
 def delete_product(request, product_id):
@@ -171,8 +146,6 @@ def delete_product(request, product_id):
     product.delete()
     messages.success(request, "Product deleted successfully!")
     return redirect('home')
-
-
 
 def edit_product(request, product_id):
     product = get_object_or_404(Product, pk=product_id, user=request.user)
